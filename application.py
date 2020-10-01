@@ -1,8 +1,9 @@
 import os
 from sqlalchemy import or_
 import time
-from flask import Flask,render_template,request,session,redirect
+from flask import Flask, render_template, request, session, redirect
 from register import *
+from books import *
 # from flask import Flask, session
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -27,26 +28,31 @@ with app.app_context():
 engine = create_engine(os.getenv("DATABASE_URL"))
 # db = scoped_session(sessionmaker(bind=engine))
 
+app.secret_key = "qwerty"
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 @app.route("/login")
 def login():
     return render_template("login.html")
+
 
 @app.route("/user")
 def user():
     return render_template("user.html")
 
-@app.route("/registration",methods=["POST","GET"])
+
+@app.route("/registration", methods=["POST", "GET"])
 def registration():
-    if request.method =="POST":
-        Name=request.form.get("Name")
+    if request.method == "POST":
+        Name = request.form.get("Name")
         UserName = request.form.get("UserName")
-        Email=request.form.get("Email")
-        Password=request.form.get("Password")
+        Email = request.form.get("Email")
+        Password = request.form.get("Password")
         # print(Name,UserName,Email,Password)
         #   return Name+" ,"+Email
         userData = User.query.filter_by(email=Email).first()
@@ -54,7 +60,8 @@ def registration():
         if userData is not None:
             return render_template("login.html", message="email already exists, Please login.")
         else:
-            user = User(name=Name,username=UserName,email=Email, password=Password,time_registered=time.ctime(time.time()))
+            user = User(name=Name, username=UserName, email=Email,
+                        password=Password, time_registered=time.ctime(time.time()))
             print("user creation done")
 
             # print(db.session.queryall)
@@ -70,18 +77,26 @@ def registration():
         return render_template("index.html", message="Register")
 
 
-@app.route("/ldetails",methods=["POST","GET"])
+@app.route("/ldetails", methods=["POST", "GET"])
 def ldetails():
-    if request.method =="POST":
+    if request.method == "POST":
         username = request.form.get('username')
         userpass = request.form.get('password')
         userData = User.query.filter_by(username=username).first()
         if userData is not None:
             if userData.username == username and userData.password == userpass:
-                return render_template("user.html",message="Sucess")
+                session[username] = username
+                return render_template("user.html", message="Sucess")
             else:
                 return render_template("login.html", message="details incorrect!!")
         else:
             return render_template("index.html", message="Account doesn't exists, Go to Registration")
     else:
         return render_template("login.html")
+
+
+@app.route("/admin")
+def admin():
+    users = User.query.all()
+    return render_template("admin.html", users=users)
+   # return render_template('index.html', message="Please login!!")

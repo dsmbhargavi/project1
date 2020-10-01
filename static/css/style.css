@@ -4,11 +4,12 @@
   box-sizing: border-box;
 }
 body{
-  background-image: url('../images/image.jpg');
+  /* background-image: url('../images/image.jpg');
   /* background-image: url('https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/84366486/original/c490739223326be0ddccbf3bd1d7381ce7926fa5/do-stunning-background-videos-for-your-website.png'); */
-  background-size: cover;
+  /*background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background: white;
 }
 .row{
   background: white;
