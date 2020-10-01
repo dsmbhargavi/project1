@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 # from sqlalchemy.orm import  sessionmaker
 
 app = Flask(__name__)
-# a=create_engine("postgres://ijnjabxiugykvh:46457019d5117fecc06ba03fa7a39080893a27b4980e382f0bf60f193fd95587@ec2-34-234-185150.compute1.amazonaws.com:5432d6nvgp7e7umvqn", echo=True)
+# a = create_engine("postgres://ijnjabxiugykvh:46457019d5117fecc06ba03fa7a39080893a27b4980e382f0bf60f193fd95587@ec2-34-234-185150.compute1.amazonaws.com:5432d6nvgp7e7umvqn", echo=True)
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
@@ -33,6 +33,8 @@ app.secret_key = "qwerty"
 
 @app.route("/")
 def index():
+    if 'username' in session:
+        return render_template("search.html")
     return render_template("index.html")
 
 
@@ -41,9 +43,28 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/logout/<username>")
+def logout(username):
+    session.pop(username, None)
+    return redirect('index.html')
+
+
 @app.route("/user")
 def user():
     return render_template("user.html")
+
+
+# @app.route("/search")
+# def search():
+ #   return render_template("search.html")
+
+
+@app.route("/admin/<user>")
+def admin(user):
+    if user in session and user == "Bunny":
+        users = User.query.all()
+        return render_template("admin.html", users=users)
+    return render_template('login.html', message="Please login!!")
 
 
 @app.route("/registration", methods=["POST", "GET"])
@@ -53,8 +74,6 @@ def registration():
         UserName = request.form.get("UserName")
         Email = request.form.get("Email")
         Password = request.form.get("Password")
-        # print(Name,UserName,Email,Password)
-        #   return Name+" ,"+Email
         userData = User.query.filter_by(email=Email).first()
 
         if userData is not None:
@@ -86,7 +105,7 @@ def ldetails():
         if userData is not None:
             if userData.username == username and userData.password == userpass:
                 session[username] = username
-                return render_template("user.html", message="Sucess")
+                return render_template("search.html", user=username, message="Sucess")
             else:
                 return render_template("login.html", message="details incorrect!!")
         else:
@@ -95,8 +114,15 @@ def ldetails():
         return render_template("login.html")
 
 
-@app.route("/admin")
-def admin():
-    users = User.query.all()
-    return render_template("admin.html", users=users)
-   # return render_template('index.html', message="Please login!!")
+@ app.route("/search/<user>", methods=["POST", "GET"])
+def search(user):
+    if request.method == "GET":
+        # return render_template("Search.html", user = user)
+        return redirect('index.html')
+
+    else:
+        res = request.form.get("find")
+        res = '%'+res+'%'
+        result = books.query.filter(or_(books.title.ilike(
+            res), books.author.ilike(res), books.isbn.ilike(res))).all()
+        return render_template("search.html", result=result, user=user)

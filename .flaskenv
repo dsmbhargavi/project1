@@ -1,3 +1,2 @@
-set FLASK_APP=application
-
-set FLASK_ENV=development
+FLASK_APP=application
+FLASK_ENV=development
