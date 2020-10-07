@@ -4,6 +4,8 @@ import time
 from flask import Flask, render_template, request, session, redirect
 from register import *
 from books import *
+import requests
+import json
 # from flask import Flask, session
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -126,3 +128,53 @@ def search(user):
         result = books.query.filter(or_(books.title.ilike(
             res), books.author.ilike(res), books.isbn.ilike(res))).all()
         return render_template("search.html", result=result, user=user)
+
+
+@ app.route("/bookpage/<user>/<isbn>", methods=["POST", "GET"])
+def bookpage(user, isbn):
+    print("entered")
+    if user in session:
+        data = requests.get("https://www.goodreads.com/book/review_counts.json",
+                            params={"key": "zA1jOumDgjKsgbwV5MIg", "isbns": isbn})
+        book = books.query.filter_by(isbn=isbn).first()
+        parsed = json.loads(data.text)
+
+        print(parsed)
+
+        res = {}
+        for i in parsed:
+            print(parsed[i])
+            for j in (parsed[i]):
+                # print(f'j,{j}')
+                res = j
+        allreviews = review.query.filter_by(isbn=isbn).all()
+        if request.method == "POST":
+            print('pst')
+            rating = request.form.get("rating")
+            reviews = request.form.get("review")
+            timestamp = time.ctime(time.time())
+            reviewtable = review(isbn=isbn, review=reviews, rating=rating,
+                                 time_stamp=timestamp, title=book.title, username=user)
+            print(reviews)
+            db.session.add(reviewtable)
+            db.session.commit()
+
+            # Get all the reviews for the given book.
+            allreviews = review.query.filter_by(isbn=isbn).all()
+            return render_template("bookpage.html", res=res, book=data, review=allreviews, property="none", message="You reviewed this book!!", user=user)
+        else:
+            # database query to check if the user had given review to that paticular book.
+            rev = review.query.filter(review.isbn.like(
+                isbn), review.username.like(user)).first()
+            # print(rev)
+
+            # Get all the reviews for the given book.
+            allreviews = review.query.filter_by(isbn=isbn).all()
+
+            # if review was not given then dispaly the book page with review button
+            if rev is None:
+                return render_template("bookpage.html", book=book, res=res, review=allreviews, user=user)
+            return render_template("bookpage.html", book=book, message="You reviewed this book!!", review=allreviews, res=res, property="none", user=user)
+    else:
+        flash('please login first', 'warning')
+        return redirect(url_for('index'))
