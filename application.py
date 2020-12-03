@@ -92,7 +92,7 @@ def registration():
             try:
                 db.session.add(user)
                 db.session.commit()
-                return render_template("user.html",  username=UserName, message="Successfully Registered")
+                return render_template("search.html",  user=UserName, message="Successfully Registered")
             except:
                 return render_template("index.html", message="Fill details!")
         return render_template("index.html", message="Register")
