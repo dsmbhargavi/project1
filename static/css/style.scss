@@ -4,8 +4,7 @@
 }
 
 .contain {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   padding-top: 70px;
 }
 
@@ -58,8 +57,6 @@ h1 {
 }
 
 .review-div {
-  width: -webkit-min-content;
-  width: -moz-min-content;
   width: min-content;
   margin: auto;
 }
@@ -67,6 +64,7 @@ h1 {
 .clearfix {
   overflow: auto;
 }
+
 
 .container {
   margin-top: 20px;
@@ -87,4 +85,3 @@ h1 {
 table {
   padding-left: 50px;
 }
-/*# sourceMappingURL=style.css.map */

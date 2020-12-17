@@ -1,132 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+{% extends "layout.html" %} {% block title %}Home{% endblock %} {%block body%}
+<form action='#' name='res' class="d-flex justify-content-center col-6 m-auto">
+    <input class="form-control" name='find' type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-info search" type="submit" onclick="loadDoc()">Search</button>
+</form>
+<div class="hide-table" style="display: none;">
+    <h3 style="margin:20px;">Search Results</h3>
+    <table style="text-align: center;" class="table">
+        <thead class="thead-dark">
+            <tr id="search">
+                <th scope="col">Book</th>
+                <th scope="col" id="isbn">Isbn</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Year</th>
+            </tr>
+        </thead>
+        <tbody id="tb">
+        </tbody>
+    </table>
+</div>
+<h1 id="username" name="userName" style="display: none;">{{user}}</h1>
+<div class="container" style="display: none;">
+    <div class="clearfix"></div>
 
-    <!-- Bootstrap CSS -->
+    <div>
+        <div style="display: none;" class="reviews">
+            <div class="container">
+                <form name="userRating">
+                    <div class="rate">
+                        <h4 class="starhead">Rating</h4>
 
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
-    <title>Registration</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{url_for('static',filename='css/style.css')}}"
-    />
-    <script
-      type="text/javascript"
-      src="{{url_for('static',filename ='js/Registration.js')}}"
-    ></script>
-  </head>
-  <body>
-    <section class="Form my-5 mx-5">
-      <div class="container">
-        <div class="row no-gutters">
-          <div class="col-lg-5">
-            <img
-              src="{{url_for('static',filename='images/background.jpg')}}"
-              class="img-fluid"
-              alt=""
-            />
-          </div>
-          <div class="col-lg-7 px-5 pt-3">
-            <h3>{{message}}</h3>
-            <h1 class="font-weight-bold py-3">Register</h1>
-            <form class="" action="{{url_for('registration') }}" method="post">
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="text"
-                    name="Name"
-                    id="Name"
-                    placeholder="Name"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="text"
-                    name="UserName"
-                    id="UserName"
-                    placeholder="UserName"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <!-- <div class="form-row">
-            <div class="col-lg-7">
-            <input type="radio" id="male" name="gender" value="male">
-            <label for="male">Male</label>
-            <input type="radio" id="female" name="gender" value="female">
-            <label for="female">Female</label>
-          </div>
-        </div> -->
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="email"
-                    name="Email"
-                    id="Email"
-                    placeholder="Email"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="password"
-                    name="Password"
-                    id="Password"
-                    placeholder="Password"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <!-- <div class="form-row">
-        <div class="col-lg-7">
-        <input type="password" placeholder="Retype-Password" class="form-control my-2 p-3">
-      </div>
-    </div> -->
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label for="star5" title="text">5 stars</label>
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label for="star4" title="text">4 stars</label>
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label for="star3" title="text">3 stars</label>
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label for="star2" title="text">2 stars</label>
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label for="star1" title="text">1 star</label>
+                    </div>
 
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <button type="submit" class="btn1 mt-2 mb-3">Register</button>
-                  <!-- <a href="{{url_for('user')}}"> <button type="submit" class="btn1 mt-2 mb-3">SignIn</button> </a> -->
-                </div>
-              </div>
-            </form>
-            <p>Have an account? <a href="{{url_for('login')}}">Login</a></p>
-          </div>
+                    <div id="text" class="row">
+                        <div class="col-75">
+                            <textarea id="Review" name="review" placeholder="Write your review.."
+                                style="height: 200px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <button class="bttn" type="submit" onclick="submitReview()">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-      </div>
-    </section>
 
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+        <div class="reviews1"></div>
+    </div>
+</div>
+</div>
+
+{% endblock %}
