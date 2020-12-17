@@ -1,132 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
-    <!-- Bootstrap CSS -->
-
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
-    <title>Registration</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{url_for('static',filename='css/style.css')}}"
-    />
-    <script
-      type="text/javascript"
-      src="{{url_for('static',filename ='js/Registration.js')}}"
-    ></script>
-  </head>
-  <body>
-    <section class="Form my-5 mx-5">
-      <div class="container">
-        <div class="row no-gutters">
-          <div class="col-lg-5">
-            <img
-              src="{{url_for('static',filename='images/background.jpg')}}"
-              class="img-fluid"
-              alt=""
-            />
-          </div>
-          <div class="col-lg-7 px-5 pt-3">
-            <h3>{{message}}</h3>
-            <h1 class="font-weight-bold py-3">Register</h1>
-            <form class="" action="{{url_for('registration') }}" method="post">
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="text"
-                    name="Name"
-                    id="Name"
-                    placeholder="Name"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="text"
-                    name="UserName"
-                    id="UserName"
-                    placeholder="UserName"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <!-- <div class="form-row">
-            <div class="col-lg-7">
-            <input type="radio" id="male" name="gender" value="male">
-            <label for="male">Male</label>
-            <input type="radio" id="female" name="gender" value="female">
-            <label for="female">Female</label>
-          </div>
-        </div> -->
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="email"
-                    name="Email"
-                    id="Email"
-                    placeholder="Email"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <input
-                    type="password"
-                    name="Password"
-                    id="Password"
-                    placeholder="Password"
-                    class="form-control my-2 p-3"
-                  />
-                </div>
-              </div>
-              <!-- <div class="form-row">
-        <div class="col-lg-7">
-        <input type="password" placeholder="Retype-Password" class="form-control my-2 p-3">
-      </div>
-    </div> -->
-
-              <div class="form-row">
-                <div class="col-lg-7">
-                  <button type="submit" class="btn1 mt-2 mb-3">Register</button>
-                  <!-- <a href="{{url_for('user')}}"> <button type="submit" class="btn1 mt-2 mb-3">SignIn</button> </a> -->
-                </div>
-              </div>
-            </form>
-            <p>Have an account? <a href="{{url_for('login')}}">Login</a></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+{% extends "layout.html" %} {% block title %}Home{% endblock %} {%block body%}
+<form action="{{url_for('search',user=user) }}" method="post" class="d-flex justify-content-center col-6 m-auto">
+    <input class="form-control" name=data type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-info search" type="submit">Search</button>
+</form>
+{% if result %}
+<table class="table text-center text-capitalize mt-5">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Book</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Year</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in result %}
+        <tr>
+            <th scope="row"><img src="http://covers.openlibrary.org/b/isbn/{{r.isbn}}-M.jpg" alt={{r.isbn}} width="100"
+                    height="150"></th>
+            <td> <a href="{{url_for('bookDetails',isbn=r.isbn,user=user)}}">{{r.isbn}}</a></td>
+            <td>{{r.title}}</td>
+            <td>{{r.author}}</td>
+            <td>{{r.year}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% if result == [] %}
+<h1 class="mt-5">No results found</h1>
+{% endif %}
+{% endblock %}

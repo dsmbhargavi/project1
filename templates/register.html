@@ -1,32 +1,73 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %}Registration{% endblock %} {% block
+body %}
 
-{% block body %}
-<div class="signup-form">
+<h1>Registration</h1>
+<div class="row justify-content-center mt-5">
+  <div class="form-group col-md-4 col-md-offset-5 align-center">
     <form action="{{url_for('registration') }}" method="post">
-		<h2>Register</h2>
-		<p class="hint-text">Create your account. It's free and only takes a minute.</p>
-        <div class="form-group">
-			<div class="row">
-				<div class="col"><input type="text" class="form-control" name="first_name" placeholder="First Name" required="required"></div>
-				<div class="col"><input type="text" class="form-control" name="last_name" placeholder="Last Name" required="required"></div>
-			</div>
+      <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <input type="text" name="Name" class="form-control" id="Name" />
+      </div>
+      <div class="mb-3">
+        <label for="Username" class="form-label">Username</label>
+        <input type="text" name="Username" class="form-control" id="Username" />
+      </div>
+
+      <div class="mb-3">
+        <label for="Email" class="form-label">Email address</label>
+        <input
+          type="email"
+          name="Email"
+          class="form-control"
+          id="Email"
+          aria-describedby="emailHelp"
+        />
+        <div id="emailHelp" class="form-text">
         </div>
-        <div class="form-group">
-        	<input type="email" class="form-control" name="email" placeholder="Email" required="required">
+      </div>
+
+      <div class="mb-3">
+        <label for="Password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="Password"
+          id="Password"
+          class="form-control"
+          aria-describedby="passwordHelpBlock"
+        />
+        <div id="passwordHelpBlock" class="form-text">
         </div>
-		<div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+      </div>
+
+      <div class="mb-3">
+        <label for="RPassword" class="form-label">Retype Password</label>
+        <input
+          type="password"
+          name="RPassword"
+          id="RPassword"
+          class="form-control"
+          aria-describedby="passwordHelpBlock"
+        />
+        <div id="passwordHelpBlock" class="form-text">
         </div>
-		<div class="form-group">
-            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
-        </div>
-        <div class="form-group">
-		</div>
-		<div class="form-group">
-            <button type="submit" class="btn btn-success btn-lg btn-block">Register Now</button>
-        </div>
+      </div>
+      <div class="mb-3 form-check">
+        <input
+          type="checkbox"
+          name="check"
+          class="form-check-input"
+          id="exampleCheck1"
+        />
+        <label class="form-check-label" for="exampleCheck1"
+          >I accept all terms and conditions</label
+        >
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Register</button>
+      <span id="have-account"
+        ><a href="{{url_for('login')}}">Already have an Account</a></span
+      >
     </form>
-	<div class="text-center">Already have an account? <a href="#">Sign in</a></div>
-</div>
+  </div>
 </div>
 {% endblock %}
